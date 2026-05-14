@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>El Grimorio Encantado</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: #0a0614;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IM Fell English', serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--dur) ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: var(--min); transform: scale(1); }
+    to { opacity: 1; transform: scale(1.4); }
+  }
+
+  .nebula {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .nebula-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(100,40,200,0.25) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+
+  .nebula-2 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(40,100,200,0.2) 0%, transparent 70%);
+    bottom: -80px; right: -80px;
+    animation: drift 15s ease-in-out infinite alternate-reverse;
+  }
+
+  .nebula-3 {
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(200,80,120,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    animation: drift 10s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(20px, 20px) scale(1.1); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .book {
+    width: 100%;
+    background: linear-gradient(145deg, #120820 0%, #1a0d2e 40%, #0f1828 100%);
+    border: 1px solid rgba(160,100,255,0.3);
+    border-radius: 4px;
+    padding: 36px 28px 40px;
+    position: relative;
+    box-shadow:
+      0 0 60px rgba(120,60,255,0.15),
+      inset 0 0 60px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(160,100,255,0.1);
+  }
+
+  .book::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(160,100,255,0.12);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  .rune-border {
+    position: absolute;
+    font-size: 10px;
+    color: rgba(160,100,255,0.3);
+    letter-spacing: 3px;
+    font-family: 'IM Fell English SC', serif;
+  }
+
+  .rune-top { top: 14px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+  .rune-bottom { bottom: 14px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+  .sigil {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+  }
+
+  .sigil svg {
+    width: 100%;
+    height: 100%;
+    animation: rotateSigil 20s linear infinite;
+  }
+
+  @keyframes rotateSigil {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .title {
+    font-family: 'Cinzel Decorative', cursive;
+    color: #d4a8ff;
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 20px rgba(180,120,255,0.6);
+  }
+
+  .subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: rgba(200,160,255,0.5);
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(160,100,255,0.4), transparent);
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .divider::before {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(160,100,255,0.6);
+    font-size: 12px;
+    background: #120820;
+    padding: 0 8px;
+  }
+
+  .prompt-text {
+    font-family: 'IM Fell English', serif;
+    color: rgba(200,170,255,0.8);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .spell-input {
+    width: 100%;
+    background: rgba(80,40,160,0.15);
+    border: 1px solid rgba(160,100,255,0.3);
+    border-radius: 3px;
+    color: #e0c8ff;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 14px 18px;
+    text-align: center;
+    outline: none;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+  }
+
+  .spell-input::placeholder {
+    color: rgba(160,100,255,0.35);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-family: 'IM Fell English SC', serif;
+    text-transform: none;
+  }
+
+  .spell-input:focus {
+    border-color: rgba(160,100,255,0.7);
+    background: rgba(80,40,160,0.25);
+    box-shadow: 0 0 20px rgba(120,60,255,0.2), inset 0 0 20px rgba(80,40,160,0.1);
+  }
+
+  .cast-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(100,50,200,0.4), rgba(60,30,140,0.4));
+    border: 1px solid rgba(160,100,255,0.5);
+    border-radius: 3px;
+    color: #d4a8ff;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cast-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(160,100,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .cast-btn:hover::before { opacity: 1; }
+
+  .cast-btn:hover {
+    border-color: rgba(160,100,255,0.8);
+    box-shadow: 0 0 30px rgba(120,60,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  .cast-btn:active { transform: translateY(0); }
+
+  .message {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 3px;
+    font-family: 'IM Fell English', serif;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.7;
+    display: none;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .message.error {
+    display: block;
+    background: rgba(180,30,60,0.15);
+    border: 1px solid rgba(180,60,80,0.3);
+    color: rgba(255,160,170,0.9);
+  }
+
+  .message.success {
+    display: block;
+    background: rgba(60,180,120,0.1);
+    border: 1px solid rgba(80,200,140,0.3);
+    color: rgba(160,255,210,0.95);
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.85;
+    text-align: left;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .spell-flash {
+    animation: spellCast 0.6s ease;
+  }
+
+  @keyframes spellCast {
+    0% { box-shadow: 0 0 0 rgba(160,100,255,0); }
+    30% { box-shadow: 0 0 80px rgba(160,100,255,0.6); }
+    100% { box-shadow: 0 0 60px rgba(120,60,255,0.15); }
+  }
+
+  .success-sigil {
+    display: none;
+    text-align: center;
+    margin-top: 16px;
+    animation: fadeIn 1s ease 0.3s both;
+  }
+
+  .success-sigil svg {
+    width: 50px;
+    height: 50px;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    from { filter: drop-shadow(0 0 6px rgba(80,200,140,0.5)); }
+    to { filter: drop-shadow(0 0 16px rgba(80,200,140,0.9)); }
+  }
+
+  .footer-rune {
+    margin-top: 24px;
+    font-family: 'IM Fell English SC', serif;
+    font-size: 10px;
+    color: rgba(160,100,255,0.2);
+    text-align: center;
+    letter-spacing: 4px;
+  }
+
+  @keyframes inputShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+  .shake { animation: inputShake 0.4s ease; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<div class="container">
+  <div class="book" id="book">
+    <span class="rune-border rune-top">✦ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ✦</span>
+    <span class="rune-border rune-bottom">✦ ᛗ ᚨ ᚷ ᛁ ᚲ ᚨ ✦</span>
+
+    <div class="sigil">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="36" cy="36" r="34" stroke="rgba(160,100,255,0.5)" stroke-width="0.8"/>
+        <circle cx="36" cy="36" r="28" stroke="rgba(160,100,255,0.25)" stroke-width="0.5"/>
+        <polygon points="36,4 67,56 5,56" fill="none" stroke="rgba(160,100,255,0.45)" stroke-width="0.8"/>
+        <polygon points="36,68 5,16 67,16" fill="none" stroke="rgba(120,70,220,0.35)" stroke-width="0.8"/>
+        <circle cx="36" cy="36" r="5" fill="rgba(160,100,255,0.6)"/>
+        <circle cx="36" cy="36" r="3" fill="rgba(200,150,255,0.9)"/>
+      </svg>
+    </div>
+
+    <h1 class="title">El Grimorio</h1>
+    <p class="subtitle">Pronuncia el hechizo para abrir el camino</p>
+
+    <div class="divider"></div>
+
+    <p class="prompt-text">Quien conozca las palabras antiguas,<br>hallará lo que busca...</p>
+
+    <div class="input-wrapper">
+      <input
+        class="spell-input"
+        id="spellInput"
+        type="text"
+        placeholder="✦ escribe el hechizo ✦"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <button class="cast-btn" id="castBtn" onclick="castSpell()">
+      ✦ &nbsp; Invocar &nbsp; ✦
+    </button>
+
+    <div class="message" id="message"></div>
+
+    <div class="success-sigil" id="successSigil">
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="23" stroke="rgba(80,200,140,0.6)" stroke-width="1"/>
+        <path d="M14 25 L22 33 L36 17" stroke="rgba(80,200,140,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="footer-rune">ᚦ ᚱ ᚢ ᚲ ✦ ᚨ ᚱ ᛏ</p>
+  </div>
+</div>
+
+<script>
+  const _s = atob("QVFVQSBPUkRJTkVN");
+  const _d = decodeURIComponent("Tu%20pr%C3%B3ximo%20destino%20no%20se%20revela%20con%20un%20truco%2C%20sino%20resolviendo%20este%20enigma%3A%0A%0ABusco%20un%20lugar%20con%20nombre%20de%20santo%20italiano%2C%20famoso%20por%20su%20alegr%C3%ADa.%20Su%20planta%20no%20tiene%20esquinas%2C%20es%20una%20elipse%20perfecta%20donde%20la%20ac%C3%BAstica%20enga%C3%B1a%20al%20o%C3%ADdo.%20En%20sus%20muros%2C%20el%20pintor%20Murillo%20dej%C3%B3%20una%20obra%20maestra%20de%20pura%20alquimia%20visual.%20Adem%C3%A1s%2C%20bajo%20sus%20arcos%20naci%C3%B3%20la%20primera%20Constituci%C3%B3n%20de%20Espa%C3%B1a%20en%201812.%0A%0AEncuentra%20las%20coordenadas%20de%20este%20templo%20del%20saber%20y%20la%20historia.%20All%C3%AD%20te%20espero.");
+
+  const ERRORS = [
+    "Las palabras se disuelven en la niebla...",
+    "El grimorio no reconoce ese hechizo.",
+    "El velo permanece sellado. Inténtalo de nuevo.",
+    "Las runas no responden a ese conjuro.",
+    "El poder antiguo no se rinde ante palabras vacías.",
+  ];
+  let errorIdx = 0;
+
+  function castSpell() {
+    const input = document.getElementById('spellInput');
+    const msg = document.getElementById('message');
+    const book = document.getElementById('book');
+    const successSigil = document.getElementById('successSigil');
+    const val = input.value.trim().toUpperCase();
+
+    msg.className = 'message';
+    msg.style.display = 'none';
+
+    if (val === _s) {
+      book.classList.add('spell-flash');
+      setTimeout(() => book.classList.remove('spell-flash'), 700);
+
+      msg.className = 'message success';
+      msg.innerHTML = _d.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+      msg.style.display = 'block';
+      successSigil.style.display = 'block';
+
+      input.style.borderColor = 'rgba(80,200,140,0.6)';
+      input.style.boxShadow = '0 0 20px rgba(80,200,140,0.2)';
+      input.style.color = 'rgba(160,255,210,0.9)';
+      input.disabled = true;
+      document.getElementById('castBtn').disabled = true;
+      document.getElementById('castBtn').style.opacity = '0.4';
+
+      launchParticles(true);
+    } else {
+      input.classList.add('shake');
+      setTimeout(() => input.classList.remove('shake'), 400);
+      launchParticles(false);
+
+      msg.className = 'message error';
+      msg.textContent = ERRORS[errorIdx % ERRORS.length];
+      msg.style.display = 'block';
+      errorIdx++;
+    }
+  }
+
+  function launchParticles(success) {
+    const input = document.getElementById('spellInput');
+    const rect = input.getBoundingClientRect();
+    const colors = success
+      ? ['rgba(80,200,140,0.9)', 'rgba(160,255,210,0.8)', 'rgba(100,220,160,0.7)']
+      : ['rgba(180,60,100,0.8)', 'rgba(255,100,130,0.7)', 'rgba(200,80,110,0.6)'];
+
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement('div');
+      const size = 3 + Math.random() * 4;
+      const angle = (Math.PI * 2 / 14) * i + Math.random() * 0.5;
+      const speed = 40 + Math.random() * 60;
+      const dx = Math.cos(angle) * speed;
+      const dy = Math.sin(angle) * speed;
+
+      p.style.cssText = `
+        position: fixed;
+        width: ${size}px; height: ${size}px;
+        border-radius: 50%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        left: ${rect.left + rect.width / 2}px;
+        top: ${rect.top + rect.height / 2}px;
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transform: translate(0, 0);
+        opacity: 1;
+      `;
+      document.body.appendChild(p);
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(${dx}px, ${dy}px)`;
+        p.style.opacity = '0';
+      });
+      setTimeout(() => p.remove(), 900);
+    }
+  }
+
+  document.getElementById('spellInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') castSpell();
+  });
+
+  function createStars() {
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 0.5;
+      star.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        --dur: ${2 + Math.random() * 4}s;
+        --min: ${0.1 + Math.random() * 0.4};
+        animation-delay: ${Math.random() * 4}s;
+      `;
+      container.appendChild(star);
+    }
+  }
+
+  createStars();
+</script>
+</body>
+</html>
